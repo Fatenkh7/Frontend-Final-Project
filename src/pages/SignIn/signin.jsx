@@ -5,78 +5,94 @@ import * as yup from "yup";
 import { userSignIn } from "../../api/apiUser";
 import { useContext, useEffect, useState } from "react";
 import { Box, Button, Stack, TextField } from "@mui/material";
-import { createTheme } from '@mui/material/styles';
+import UserContext from "../../context/user";
+import { createTheme } from "@mui/material/styles";
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    metallicBlue: {
+      main: "#000000",
+      border: "#03e9f4",
+    },
+  },
+});
 
 const SignIn = () => {
+  const { login } = useContext(UserContext);
+  const navigate = useNavigate();
+  useEffect(() => {}, []);
+  const [isRequest, setIsRequest] = useState(false);
+  const form = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: yup.object({
+      email: yup
+        .string()
+        .required("Email is required")
+        .email("Invalid email address"),
+      password: yup
+        .string()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters"),
+    }),
+    onSubmit: async (values) => {
+      try {
+        setIsRequest(true);
+        const { response, err } = await userSignIn(values.email, values.password);
+        if (err) {
+          toast.error(err.message || "Failed to sign in.");
+        } else {
+          login(response);
+          navigate("/");
+          toast.success("Sign in success");
+        }
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setIsRequest(false);
+      }
+    },
+  });
 
-    const theme = createTheme({
-        palette: {
-            metallicBlue: {
-                main: '#000000',
-                border: "#03e9f4",
-            },
-        },
-    });
-    const navigate = useNavigate();
-
-    const formik = useFormik({
-        initialValues: {
-            email: '',
-            password: '',
-        },
-        validationSchema: yup.object().shape({
-            email: yup.string().email('Invalid email').required('Required'),
-            password: yup.string().required('Required'),
-        }),
-        onSubmit: async (values) => {
-            try {
-                const response = await userSignIn(values.email, values.password);
-                const { data } = response;
-                toast.success('Successfully signed in');
-                // You can store the user data in the UserContext here
-                navigate('/home');
-            } catch (err) {
-                toast.error('Invalid email or password');
-            }
-        },
-    });
-
-    return (
-        <Box component="form" noValidate onSubmit={formik.handleSubmit}>
-            <Stack spacing={3}>
-                <TextField
-                    fullWidth
-                    placeholder="email"
-                    name="email"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email}
-                />
-                <TextField
-                    fullWidth
-                    placeholder="password"
-                    name="password"
-                    type="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.password && Boolean(formik.errors.password)}
-                    helperText={formik.touched.password && formik.errors.password}
-                />
-                <Button
-                    type="submit"
-                    size="large"
-                    sx={{ color: theme.palette.metallicBlue.border, borderLeft: 1, backgroundColor: theme.palette.metallicBlue.main }}
-                >
-                    signin
-                </Button>
-            </Stack>
-        </Box>
-    );
+  return (
+    <Box component="form" noValidate onSubmit={form.handleSubmit}>
+      <Stack spacing={3}>
+        <TextField
+          fullWidth
+          placeholder="Email"
+          name="email"
+          value={form.values.email}
+          onChange={form.handleChange}
+          error={form.touched.email && form.errors.email !== undefined}
+          helperText={form.touched.email && form.errors.email}
+        />
+        <TextField
+          fullWidth
+          placeholder="Password"
+          name="password"
+          value={form.values.password}
+          onChange={form.handleChange}
+          type="password"
+          error={form.touched.password && form.errors.password !== undefined}
+          helperText={form.touched.password && form.errors.password}
+        />
+        <Button
+          type="submit"
+          size="large"
+          sx={{
+            color: theme.palette.metallicBlue.border,
+            borderLeft: 1,
+            backgroundColor: theme.palette.metallicBlue.main,
+          }}
+          disabled={isRequest}
+        >
+          Sign In
+        </Button>
+      </Stack>
+    </Box>
+  );
 };
 
 export default SignIn;

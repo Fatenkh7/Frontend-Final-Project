@@ -5,12 +5,12 @@ import { useContext } from "react";
 import UserContext from "../context/user";
 const ProtectedRoute = (props) => {
   const navigate = useNavigate();
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
   useEffect(() => {
-    if (!user) navigate("/signup");
-  }, [navigate,user]);
+    if (!user) navigate("/signin");
+  }, [navigate, user]);
 
-  return user?(<Box sx={{ height: "100vh" }}>{props.children}</Box>):<div></div>;
+  return user ? (<Box sx={{ height: "100vh" }}>{props.children}</Box>) : <div></div>;
 };
 
 export default ProtectedRoute;

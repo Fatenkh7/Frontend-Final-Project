@@ -1,9 +1,14 @@
 import axiosClient from "./apiClient";
 
-export const userSignIn = async () => {
+export const userSignIn = async (email, password) => {
   try {
     const response = await axiosClient.post(
-      "user/signin");
+      "user/signin",
+      {
+        email,
+        password,
+      }
+    );
 
     return { response };
   } catch (err) {
@@ -11,3 +16,25 @@ export const userSignIn = async () => {
   }
 };
 
+export const createUser = async (first_name,
+  last_name,
+  email,
+  username,
+  password,) => {
+  try {
+    const response = await axiosClient.post(
+      "user/signup",
+      {
+        first_name,
+        last_name,
+        email,
+        username,
+        password,
+      }
+    );
+
+    return { response };
+  } catch (err) {
+    return { err };
+  }
+};
