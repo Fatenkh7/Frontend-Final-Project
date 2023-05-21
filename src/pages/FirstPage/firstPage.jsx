@@ -1,21 +1,43 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Box, Button, Typography } from '@mui/material';
 import logo from '../../logo.svg';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import Typewriter from 'typewriter-effect/dist/core';
+import "./firstpage.css"
 
 const Container = styled(Box)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #141414;
+`;
+
+const BotContainer = styled(Box)`
+  padding: 50px;
+  border-radius: 10px;
+  background-color: #1c1c1c;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 `;
 
-const Logo = styled(motion.img)`
-  width: 150px;
-  margin-bottom: 50px;
+const BotIcon = styled(motion.img)`
+  width: 200px;
+  height: 300px;
+`;
+
+
+const Text = styled(Typography)`
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 30px;
+  font-family: emoji;
 `;
 
 const ButtonContainer = styled(Box)`
@@ -23,60 +45,74 @@ const ButtonContainer = styled(Box)`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
 `;
 
 const SignInButton = styled(Button)`
   && {
-    background-color: #03e9f4;
-    color: #000000;
+    background-color: #15b1b9;
+    color: #ffffff;
     margin-right: 10px;
     &:hover {
-      background-color: #018ca1;
+      background-color: #39f6ff;
+      color: #ffffff;
     }
   }
 `;
 
 const SignUpButton = styled(Button)`
   && {
-    background-color: #03e9f4;
-    color: #000000;
+    border: 1px solid #03e9f4;
+    background-color: #1c1c1c;
+    color: #ffffff;
     margin-left: 10px;
     &:hover {
-      background-color: #018ca1;
+      background-color: #39f6ff;
+      color: #ffffff;
     }
   }
 `;
 
-const Title = styled(Typography)`
-  font-family: 'Montserrat', sans-serif;
-  margin-top: 30px;
-`;
-
 const FirstPage = () => {
-    return (
-        <Container>
-            <AnimatePresence>
-                <Logo
-                    src={logo}
-                    alt="logo"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    transition={{ duration: 0.5 }}
-                />
-            </AnimatePresence>
-            <Title variant="h4">Welcome to Mashed-Bot AI</Title>
-            <ButtonContainer>
-                <Link to="/signin">
-                    <SignInButton variant="contained">Sign In</SignInButton>
-                </Link>
-                <Link to="/signup">
-                    <SignUpButton variant="contained">Sign Up</SignUpButton>
-                </Link>
-            </ButtonContainer>
-        </Container>
-    );
+  const [typewriterText, setTypewriterText] = useState("");
+  useEffect(() => {
+    const typewriter = new Typewriter('#typewriter', {
+      strings: ['Hello, I am Mashed-Bot', 'How may I assist you?'],
+      autoStart: true,
+      delay: 50,
+      deleteSpeed: 20,
+      loop: true
+    });
+
+    return () => {
+      typewriter.stop();
+    };
+  }, []);
+
+  return (
+    <Container>
+      <BotContainer>
+        <AnimatePresence>
+          <BotIcon
+            src={logo}
+            alt="bot icon"
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -100, opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          />
+        </AnimatePresence>
+        <Text variant="body1" id="typewriter" />
+        <ButtonContainer>
+          <Link to="/signin">
+            <SignInButton variant="contained">Sign In</SignInButton>
+          </Link>
+          <Link to="/signup">
+            <SignUpButton variant="contained">Sign Up</SignUpButton>
+          </Link>
+        </ButtonContainer>
+      </BotContainer>
+    </Container>
+  );
 };
 
 export default FirstPage;

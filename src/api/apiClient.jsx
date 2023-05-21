@@ -1,25 +1,15 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:8000/";
-
 const axiosClient = axios.create({
-  baseURL
+  baseURL: "http://localhost:8000",
 });
 
-axiosClient.interceptors.request.use(async config => {
-  return {
-    ...config,
-    headers: {
-      "Content-Type": "application/json",
-    }
-  };
-});
-
-axiosClient.interceptors.response.use((response) => {
-  if (response && response.data) return response.data;
-  return response;
-}, (err) => {
-  throw err.response.data;
+axiosClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 export default axiosClient;
