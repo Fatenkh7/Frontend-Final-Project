@@ -116,6 +116,8 @@
         margin: 10px;
         transform: translate(0);
         background: linear-gradient(-45deg, #03e9f4 0%, #fc2586 100%);
+        margin-bottom: 30px;
+        font-size: 12px;
     }
 
     .about-container {

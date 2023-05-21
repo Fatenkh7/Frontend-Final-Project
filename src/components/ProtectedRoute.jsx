@@ -1,16 +1,14 @@
 import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import UserContext from "../context/user";
 const ProtectedRoute = (props) => {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
   useEffect(() => {
-    if (!user) navigate("/signin");
-  }, [navigate, user]);
+    if (!localStorage.getItem("token"))
+      navigate("/signin");
+  }, [navigate]);
 
-  return user ? (<Box sx={{ height: "100vh" }}>{props.children}</Box>) : <div></div>;
+  return <Box sx={{ height: "100vh" }}>{props.children}</Box>;
 };
 
 export default ProtectedRoute;
