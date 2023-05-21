@@ -20,7 +20,7 @@ const AuthRoute = (props) => {
       }}
     >
       <Header>
-        <Typography variant="h5" fontWeight="600">
+        <Typography variant="h5" fontWeight="600" fontFamily={"emoji"}>
           MASHED-BOT
         </Typography>
       </Header>

@@ -3,6 +3,7 @@ import AuthRoute from "./components/AuthRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home/home";
 import FirstPage from "./pages/FirstPage/firstPage";
+import Page from "./pages/Page/page"
 import SignIn from "./pages/SignIn/signin";
 import SignUp from "./pages/Signup/signiup";
 import UserContext from "./context/user";
@@ -11,6 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import About from "./pages/About/About";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -26,7 +28,7 @@ function App() {
     setUser(null);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -45,11 +47,7 @@ function App() {
           <Route
             path="/"
             element={
-              <UserContext.Provider
-                value={{ user: user, login: login, logout: logout }}
-              >
-                <FirstPage />
-              </UserContext.Provider>
+              <Page />
             }
           />
           <Route
@@ -64,6 +62,8 @@ function App() {
               </UserContext.Provider>
             }
           />
+          <Route path="/about" element={<About />} />
+          <Route path="/sign" element={<FirstPage />} />
           <Route
             path="/signin"
             element={

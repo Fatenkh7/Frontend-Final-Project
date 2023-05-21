@@ -20,7 +20,7 @@ const theme = createTheme({
 const SignIn = () => {
   const { login } = useContext(UserContext);
   const navigate = useNavigate();
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
   const [isRequest, setIsRequest] = useState(false);
   const form = useFormik({
     initialValues: {
@@ -30,10 +30,12 @@ const SignIn = () => {
     validationSchema: yup.object({
       email: yup
         .string()
+        .trim()
         .required("Email is required")
         .email("Invalid email address"),
       password: yup
         .string()
+        .trim()
         .required("Password is required")
         .min(6, "Password must be at least 6 characters"),
     }),
@@ -41,11 +43,12 @@ const SignIn = () => {
       try {
         setIsRequest(true);
         const { response, err } = await userSignIn(values.email, values.password);
+        console.log(response)
         if (err) {
           toast.error(err.message || "Failed to sign in.");
         } else {
           login(response);
-          navigate("/");
+          navigate("/home");
           toast.success("Sign in success");
         }
       } catch (error) {

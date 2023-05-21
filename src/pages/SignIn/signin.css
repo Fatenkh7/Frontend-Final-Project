@@ -1,0 +1,12 @@
+.siginin-container {
+    width: 390px;
+    height: 554px;
+    background: #080808;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 20px;
+}
