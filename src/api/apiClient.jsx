@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "https://mashedbot-ai.onrender.com",
 });
 
 axiosClient.interceptors.request.use((config) => {

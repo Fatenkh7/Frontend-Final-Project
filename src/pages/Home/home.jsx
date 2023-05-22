@@ -19,15 +19,13 @@ const HomePage = () => {
   const [question, setQuestion] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
   const [audioPlaying, setAudioPlaying] = useState(false);
-  const [currentPlayingIndex, setCurrentPlayingIndex] = useState(-1); // Track the index of the currently playing message
-  const [latestAnswer, setLatestAnswer] = useState(""); // Track the latest answer
-  const [fetchingAnswer, setFetchingAnswer] = useState(false); // Track if an answer is being fetched
+  const [currentPlayingIndex, setCurrentPlayingIndex] = useState(-1);
+  const [latestAnswer, setLatestAnswer] = useState("");
 
   const handleQuestionSubmit = async () => {
-    if (question.trim() !== "" && !fetchingAnswer) {
+    if (question.trim() !== "") {
       setChatMessages((prevMessages) => [...prevMessages, { type: "question", content: question }]);
       setQuestion("");
-      setFetchingAnswer(true);
 
       try {
         const { response, error } = await addQuestion({ question });
@@ -40,7 +38,6 @@ const HomePage = () => {
           doSpeechSynthesis(answer, () => {
             setAudioPlaying(false);
             setCurrentPlayingIndex(-1);
-            setFetchingAnswer(false);
           });
         } else if (error) {
           console.log(error);
@@ -49,12 +46,10 @@ const HomePage = () => {
           } else {
             // Handle other errors
           }
-          setFetchingAnswer(false);
         }
       } catch (error) {
         console.log(error);
         // Handle other errors
-        setFetchingAnswer(false);
       }
     }
   };
@@ -139,7 +134,6 @@ const HomePage = () => {
                   handleQuestionSubmit();
                 }
               }}
-              disabled={fetchingAnswer}
               endAdornment={
                 <IconButton
                   color="#39f6ff"
@@ -149,7 +143,6 @@ const HomePage = () => {
                       cursor: "pointer",
                     },
                   }}
-                  disabled={fetchingAnswer}
                 >
                   <SendOutlinedIcon />
                 </IconButton>
