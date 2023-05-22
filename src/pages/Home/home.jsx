@@ -12,8 +12,9 @@ import { doSpeechSynthesis, cancelSpeechSynthesis } from "../../utils/text-speac
 import Typewriter from "typewriter-effect";
 import Logo from "../../logo.svg";
 import "./home.css";
+import Loading from '../../components/loading/loading';
 
-const HomePage = () => {
+const HomePage = ({ loading }) => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [question, setQuestion] = useState("");
@@ -55,6 +56,7 @@ const HomePage = () => {
   };
 
   const handleSignOut = () => {
+    localStorage.removeItem("token");
     navigate("/");
   };
 
@@ -66,6 +68,10 @@ const HomePage = () => {
       });
     }
   }, [latestAnswer]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <Stack alignItems="center" justifyContent="space-between" sx={{ height: "100%" }}>

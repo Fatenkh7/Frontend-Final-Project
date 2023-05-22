@@ -1,18 +1,20 @@
-import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import * as yup from "yup";
-import { createUser } from "../../api/apiUser";
-import UserContext from "../../context/user";
-import { Box, Button, Stack, TextField } from "@mui/material";
-import { createTheme } from "@mui/material/styles";
+import { React, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
+import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
+import * as yup from 'yup';
+import { createUser } from '../../api/apiUser';
+import UserContext from '../../context/user';
+import { Box, Button, Stack, TextField } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
+import Loading from '../../components/loading/loading';
 
 const theme = createTheme({
     palette: {
         metallicBlue: {
-            main: "#000000",
-            border: "#03e9f4",
+            main: '#000000',
+            border: '#03e9f4',
         },
     },
 });
@@ -21,55 +23,64 @@ const SignUp = () => {
     const navigate = useNavigate();
     const { login } = useContext(UserContext);
     const [isRequest, setIsRequest] = useState(false);
+    const [loading, setLoading] = useState(false); // Added loading state
     const form = useFormik({
         initialValues: {
-            first_name: "",
-            last_name: "",
-            email: "",
-            username: "",
-            password: "",
+            first_name: '',
+            last_name: '',
+            email: '',
+            username: '',
+            password: '',
         },
         validationSchema: yup.object({
-            first_name: yup.string().trim().required("First name is required"),
-            last_name: yup.string().trim().required("Last name is required"),
+            first_name: yup.string().trim().required('First name is required'),
+            last_name: yup.string().trim().required('Last name is required'),
             email: yup
                 .string()
                 .trim()
-                .required("Email is required")
-                .email("Invalid email address")
-                .min(23, "Email is not valid")
-                .max(25, "Email is not valid"),
+                .required('Email is required')
+                .email('Invalid email address')
+                .min(23, 'Email is not valid')
+                .max(25, 'Email is not valid'),
             username: yup
                 .string()
                 .trim()
-                .required("Username is required")
-                .min(4, "Username must be at least 4 characters")
-                .max(9, "Username could be up too 9 characters"),
-            password: yup
-                .string()
-                .trim()
-                .required("Password is required")
-                .min(6, "Password must be at least 6 characters"),
+                .required('Username is required')
+                .min(4, 'Username must be at least 4 characters')
+                .max(9, 'Username could be up too 9 characters'),
+            password: yup.string().trim().required('Password is required').min(6, 'Password must be at least 6 characters'),
         }),
 
         onSubmit: async (values) => {
             try {
                 setIsRequest(true);
-                const { response, err } = await createUser(values.first_name, values.last_name, values.username, values.email, values.password);
+                setLoading(true); // Set loading state to true
+                const { response, err } = await createUser(
+                    values.first_name,
+                    values.last_name,
+                    values.username,
+                    values.email,
+                    values.password
+                );
                 if (err) {
-                    toast.error(err.message || "Failed to sign up.");
+                    toast.error(err.message || 'Failed to sign up.');
                 } else {
                     login(response);
-                    navigate("/signin");
-                    toast.success("Sign up success");
+                    navigate('/signin');
+                    toast.success('Sign up success');
                 }
             } catch (error) {
                 toast.error(error.message);
             } finally {
                 setIsRequest(false);
+                setLoading(false); // Set loading state to false
             }
         },
     });
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <Box component="form" noValidate onSubmit={form.handleSubmit}>

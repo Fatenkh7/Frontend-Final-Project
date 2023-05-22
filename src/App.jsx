@@ -1,9 +1,8 @@
 import "react-toastify/dist/ReactToastify.css";
 import AuthRoute from "./components/AuthRoute";
-import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home/home";
 import FirstPage from "./pages/FirstPage/firstPage";
-import Page from "./pages/Page/page"
+import Page from "./pages/Page/page";
 import SignIn from "./pages/SignIn/signin";
 import SignUp from "./pages/Signup/signiup";
 import UserContext from "./context/user";
@@ -13,9 +12,13 @@ import { CssBaseline } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import About from "./pages/About/About";
+import Loading from "./components/loading/loading";
+import ProtectedRoute from "./components/ProtectedRoute";
+import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const theme = createTheme({
     palette: { mode: "dark" },
   });
@@ -28,7 +31,19 @@ function App() {
     setUser(null);
   };
 
-  useEffect(() => { }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  }, []);
+
+  if (loading) {
+    return (
+      <h1>
+        <Loading />
+      </h1>
+    );
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -44,32 +59,15 @@ function App() {
       />
       <BrowserRouter>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <Page />
-            }
-          />
-          <Route
-            path="/home"
-            element={
-              <UserContext.Provider
-                value={{ user: user, login: login, logout: logout }}
-              >
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              </UserContext.Provider>
-            }
-          />
-          <Route path="/about" element={<About />} />
-          <Route path="/sign" element={<FirstPage />} />
+          <Route path="/" element={<Page loading={loading} />} />
+          <Route path="/about" element={<About loading={loading} />} />
+          <Route path="/sign" element={<FirstPage loading={loading} />} />
           <Route
             path="/signin"
             element={
               <UserContext.Provider value={{ login: login }}>
                 <AuthRoute>
-                  <SignIn />
+                  <SignIn loading={loading} />
                 </AuthRoute>
               </UserContext.Provider>
             }
@@ -79,11 +77,22 @@ function App() {
             element={
               <UserContext.Provider value={{ login: login }}>
                 <AuthRoute>
-                  <SignUp />
+                  <SignUp loading={loading} />
                 </AuthRoute>
               </UserContext.Provider>
             }
           />
+          <Route
+            path="/home"
+            element={
+              <UserContext.Provider value={{ user: user, login: login, logout: logout }}>
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              </UserContext.Provider>
+            }
+          />
+          <Route path="*" element={<NotFoundPage loading={loading} />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

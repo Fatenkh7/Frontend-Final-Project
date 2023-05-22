@@ -4,13 +4,18 @@ import './About.css';
 import Button from '../../components/Button/Button';
 import { motion } from "framer-motion";
 import Logo from '../../logo.svg';
+import Loading from '../../components/loading/loading';
 
-function About() {
+function About({ loading }) {
     const [showContent, setShowContent] = useState(false);
 
     const toggleContent = () => {
         setShowContent(!showContent);
     };
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <motion.div
@@ -34,8 +39,8 @@ function About() {
                     {showContent && (
                         <p className="additional-content">
                             However, it's important to note that I am an artificial intelligence and do not possess personal experiences, emotions, or consciousness.
-                             My responses are generated based on patterns and information present in the training data. 
-                             I'm here to assist you to the best of my abilities, so feel free to ask me anything you'd like to know!
+                            My responses are generated based on patterns and information present in the training data. 
+                            I'm here to assist you to the best of my abilities, so feel free to ask me anything you'd like to know!
                         </p>
                     )}
                     <button className="btn-about" onClick={toggleContent}>
