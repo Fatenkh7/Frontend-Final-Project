@@ -93,6 +93,7 @@ function App() {
             }
           />
           <Route path="*" element={<NotFoundPage loading={loading} />} />
+
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
