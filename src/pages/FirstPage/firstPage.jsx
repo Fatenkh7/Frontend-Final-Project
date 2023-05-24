@@ -1,12 +1,12 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Box, Button, Typography } from '@mui/material';
 import logo from '../../logo.svg';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Typewriter from 'typewriter-effect/dist/core';
-import "./firstpage.css"
+import "./firstpage.css";
+import Loading from '../../components/loading/loading';
 
 const Container = styled(Box)`
   display: flex;
@@ -72,7 +72,7 @@ const SignUpButton = styled(Button)`
   }
 `;
 
-const FirstPage = () => {
+const FirstPage = ({ loading }) => {
   const [typewriterText, setTypewriterText] = useState("");
   useEffect(() => {
     const typewriter = new Typewriter('#typewriter', {
@@ -87,6 +87,10 @@ const FirstPage = () => {
       typewriter.stop();
     };
   }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <Container>
