@@ -3,6 +3,10 @@
     height: 112px;
 }
 .loader-container{
+    background-color: #111010;
+    position: fixed;
+    top:0;
+    left:0;
     height: 100vh;
     width: 100vw;
     display: flex;
@@ -13,7 +17,7 @@
 .box1,
 .box2,
 .box3 {
-    border: 16px solid #fefefe;
+    border: 16px solid #39f6ff;
     box-sizing: border-box;
     position: absolute;
     display: block;

@@ -20,11 +20,11 @@ const theme = createTheme({
 });
 
 const SignIn = () => {
-  const { login } = useContext(UserContext);
+  const { login, user } = useContext(UserContext);
   const navigate = useNavigate();
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
   const [isRequest, setIsRequest] = useState(false);
-  const [loading, setLoading] = useState(false); // Added loading state
+  const [loading, setLoading] = useState(false);
   const form = useFormik({
     initialValues: {
       email: '',
@@ -37,21 +37,20 @@ const SignIn = () => {
     onSubmit: async (values) => {
       try {
         setIsRequest(true);
-        setLoading(true); // Set loading state to true
+        setLoading(true);
         const { response, err } = await userSignIn(values.email, values.password);
-        console.log(response);
         if (err) {
           toast.error(err.message || 'Failed to sign in.');
         } else {
           login(response);
-          navigate('/home');
+          navigate('/home',  { state: { email: values.email } });
           toast.success('Sign in success');
         }
       } catch (error) {
         toast.error(error.message);
       } finally {
         setIsRequest(false);
-        setLoading(false); // Set loading state to false
+        setLoading(false);
       }
     },
   });

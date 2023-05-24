@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Stack, Box, Typography, IconButton, FormControl, OutlinedInput } from "@mui/material";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
@@ -22,6 +22,8 @@ const HomePage = ({ loading }) => {
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [currentPlayingIndex, setCurrentPlayingIndex] = useState(-1);
   const [latestAnswer, setLatestAnswer] = useState("");
+  const location = useLocation();
+  const email = location?.state?.email;
 
   const handleQuestionSubmit = async () => {
     if (question.trim() !== "") {
@@ -76,17 +78,17 @@ const HomePage = ({ loading }) => {
   return (
     <Stack alignItems="center" justifyContent="space-between" sx={{ height: "100%" }}>
       <Header bg borderBottom>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingX: 2, maxWidth: "md" }}>
-          <Typography variant="h6" fontWeight="700" sx={{ opacity: 0.6 }} color="red">
-            {user && user.email}
+        <div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", padding: "5px 10px", alignItems: "center" }}>
+          <Typography color="#fff">
+            {email.split("@")[0]}
           </Typography>
-          <img src={Logo} alt="Logo" style={{ height: "30px", left: "30px" }} />
-        </Box>
-        <IconButton onClick={handleSignOut}>
-          <LogoutOutlinedIcon />
-        </IconButton>
-      </Header>
 
+          <img alt="mashed logo" src={Logo} width="45" />
+          <IconButton onClick={handleSignOut}>
+            <LogoutOutlinedIcon />
+          </IconButton>
+        </div>
+      </Header>
       <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "flex-end", maxWidth: "md", width: "100%" }}>
         {chatMessages.map((message, index) => (
           <Box key={index} padding={2} style={{ display: "flex", alignItems: "center" }}>
@@ -127,7 +129,6 @@ const HomePage = ({ loading }) => {
           </Box>
         ))}
       </Box>
-
       <Stack width="100%" alignItems="center" justifyContent="center" borderTop="1px solid #39f6ff" bgcolor="#000" zIndex={3}>
         <Box padding={2} width="100%" maxWidth="md">
           <FormControl fullWidth variant="outlined">

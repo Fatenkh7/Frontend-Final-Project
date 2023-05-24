@@ -40,8 +40,7 @@ const SignUp = () => {
                 .trim()
                 .required('Email is required')
                 .email('Invalid email address')
-                .min(23, 'Email is not valid')
-                .max(25, 'Email is not valid'),
+                .max(23,'Invalid email'),
             username: yup
                 .string()
                 .trim()
@@ -58,8 +57,8 @@ const SignUp = () => {
                 const { response, err } = await createUser(
                     values.first_name,
                     values.last_name,
-                    values.username,
                     values.email,
+                    values.username,
                     values.password
                 );
                 if (err) {
@@ -76,6 +75,7 @@ const SignUp = () => {
                 setLoading(false); // Set loading state to false
             }
         },
+
     });
 
     if (loading) {
