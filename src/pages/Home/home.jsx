@@ -75,7 +75,7 @@ const HomePage = ({ loading }) => {
   const handleFeedback = async () => {
     try {
       // Make an API call to submit the feedback
-      const response = await submitFeedback({ answer: latestAnswer, feedback: 'Your feedback message' });
+      const response = await addQuestion({ answer: latestAnswer, feedback: 'Your feedback message' });
       if (response.success) {
         console.log("Feedback submitted successfully");
         // Optionally, you can show a success message to the user
@@ -195,7 +195,7 @@ const HomePage = ({ loading }) => {
             </FormControl>
             <Button
               variant="outlined"
-              sx={{ mt: 2, opacity: 0.5 }} // Set the opacity to 0.5
+              sx={{ mt: 2, opacity: 0.5 }}
               onClick={handleFeedback}
             >
               Send Feedback

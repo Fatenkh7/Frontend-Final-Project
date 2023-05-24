@@ -47,7 +47,7 @@ const SignIn = () => {
           toast.success('Sign in success');
         }
       } catch (error) {
-        toast.error(error.message);
+        toast.error("Failed to sign in");
       } finally {
         setIsRequest(false);
         setLoading(false);

@@ -62,14 +62,14 @@ const SignUp = () => {
                     values.password
                 );
                 if (err) {
-                    toast.error(err.message || 'Failed to sign up.');
+                    toast.error('Failed to sign up.');
                 } else {
                     login(response);
                     navigate('/signin');
                     toast.success('Sign up success');
                 }
             } catch (error) {
-                toast.error(error.message);
+                toast.error("Failed to sign up");
             } finally {
                 setIsRequest(false);
                 setLoading(false); // Set loading state to false
