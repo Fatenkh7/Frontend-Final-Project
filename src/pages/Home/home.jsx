@@ -1,14 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  Stack,
-  Box,
-  Typography,
-  IconButton,
-  FormControl,
-  OutlinedInput,
-  Button,
-} from "@mui/material";
+import { Stack, Box, Typography, IconButton, FormControl, OutlinedInput } from "@mui/material";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -20,7 +12,7 @@ import { doSpeechSynthesis, cancelSpeechSynthesis } from "../../utils/text-speac
 import Typewriter from "typewriter-effect";
 import Logo from "../../logo.svg";
 import "./home.css";
-import Loading from "../../components/loading/loading";
+import Loading from '../../components/loading/loading';
 
 const HomePage = ({ loading }) => {
   const { user } = useContext(UserContext);
@@ -30,7 +22,6 @@ const HomePage = ({ loading }) => {
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [currentPlayingIndex, setCurrentPlayingIndex] = useState(-1);
   const [latestAnswer, setLatestAnswer] = useState("");
-  const [showFeedbackButton, setShowFeedbackButton] = useState(false); // State to control the visibility of the feedback button
   const location = useLocation();
   const email = location?.state?.email;
 
@@ -45,12 +36,11 @@ const HomePage = ({ loading }) => {
           const { answer } = response.data; // Extract the 'answer' property from the response object
           setLatestAnswer(answer); // Update the latest answer
           setChatMessages((prevMessages) => [...prevMessages, { type: "answer", content: answer }]);
-          setCurrentPlayingIndex((prevIndex) => prevIndex + 1);
+          setCurrentPlayingIndex(prevIndex => prevIndex + 1);
           setAudioPlaying(true);
           doSpeechSynthesis(answer, () => {
             setAudioPlaying(false);
             setCurrentPlayingIndex(-1);
-            setShowFeedbackButton(true); // Show the feedback button when the answer is received
           });
         } else if (error) {
           console.log(error);
@@ -72,30 +62,11 @@ const HomePage = ({ loading }) => {
     navigate("/");
   };
 
-  const handleFeedback = async () => {
-    try {
-      // Make an API call to submit the feedback
-      const response = await addQuestion({ answer: latestAnswer, feedback: 'Your feedback message' });
-      if (response.success) {
-        console.log("Feedback submitted successfully");
-        // Optionally, you can show a success message to the user
-      } else {
-        console.log("Failed to submit feedback");
-        // Handle the case when the feedback submission fails
-      }
-    } catch (error) {
-      console.log("Error submitting feedback:", error);
-      // Handle the error case
-    }
-  };
-
-
   useEffect(() => {
     if (latestAnswer) {
       setAudioPlaying(true);
       doSpeechSynthesis(latestAnswer, () => {
         setAudioPlaying(false);
-        setShowFeedbackButton(true); // Show the feedback button after the speech synthesis is complete
       });
     }
   }, [latestAnswer]);
@@ -107,17 +78,10 @@ const HomePage = ({ loading }) => {
   return (
     <Stack alignItems="center" justifyContent="space-between" sx={{ height: "100%" }}>
       <Header bg borderBottom>
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            padding: "5px 10px",
-            alignItems: "center",
-          }}
-        >
-          <Typography color="#fff">{email.split("@")[0]}</Typography>
+        <div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", padding: "5px 10px", alignItems: "center" }}>
+          <Typography color="#fff">
+            {email.split("@")[0]}
+          </Typography>
 
           <img alt="mashed logo" src={Logo} width="45" />
           <IconButton onClick={handleSignOut}>
@@ -165,44 +129,35 @@ const HomePage = ({ loading }) => {
           </Box>
         ))}
       </Box>
-      {showFeedbackButton && (
-        <Stack width="100%" alignItems="center" justifyContent="center" borderTop="1px solid #39f6ff" bgcolor="#000" zIndex={3}>
-          <Box padding={2} width="100%" maxWidth="md">
-            <FormControl fullWidth variant="outlined">
-              <OutlinedInput
-                placeholder="Ask something..."
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    handleQuestionSubmit();
-                  }
-                }}
-                endAdornment={
-                  <IconButton
-                    color="#39f6ff"
-                    onClick={handleQuestionSubmit}
-                    sx={{
-                      "&:hover": {
-                        cursor: "pointer",
-                      },
-                    }}
-                  >
-                    <SendOutlinedIcon />
-                  </IconButton>
+      <Stack width="100%" alignItems="center" justifyContent="center" borderTop="1px solid #39f6ff" bgcolor="#000" zIndex={3}>
+        <Box padding={2} width="100%" maxWidth="md">
+          <FormControl fullWidth variant="outlined">
+            <OutlinedInput
+              placeholder="Ask something..."
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  handleQuestionSubmit();
                 }
-              />
-            </FormControl>
-            <Button
-              variant="outlined"
-              sx={{ mt: 2, opacity: 0.5 }}
-              onClick={handleFeedback}
-            >
-              Send Feedback
-            </Button>
-          </Box>
-        </Stack>
-      )}
+              }}
+              endAdornment={
+                <IconButton
+                  color="#39f6ff"
+                  onClick={handleQuestionSubmit}
+                  sx={{
+                    "&:hover": {
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <SendOutlinedIcon />
+                </IconButton>
+              }
+            />
+          </FormControl>
+        </Box>
+      </Stack>
     </Stack>
   );
 };
