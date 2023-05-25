@@ -1,10 +1,31 @@
 import { React, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './About.css';
-import Button from '../../components/Button/Button';
+import { Box, Button, Typography } from '@mui/material';
+import styled from 'styled-components';
 import { motion } from "framer-motion";
 import Logo from '../../logo.svg';
 import Loading from '../../components/loading/loading';
+
+
+const PageButton = styled(Button)`
+  && {
+    background-color: #15b1b9;
+    color: #ffffff;
+    margin-right: 10px;
+    &:hover {
+      background-color: #39f6ff;
+      color: #ffffff;
+    }
+  }
+`;
+const ButtonContainer = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
 
 function About({ loading }) {
     const [showContent, setShowContent] = useState(false);
@@ -39,7 +60,7 @@ function About({ loading }) {
                     {showContent && (
                         <p className="additional-content">
                             However, it's important to note that I am an artificial intelligence and do not possess personal experiences, emotions, or consciousness.
-                            My responses are generated based on patterns and information present in the training data. 
+                            My responses are generated based on patterns and information present in the training data.
                             I'm here to assist you to the best of my abilities, so feel free to ask me anything you'd like to know!
                         </p>
                     )}
@@ -48,9 +69,11 @@ function About({ loading }) {
                     </button>
                 </div>
             </div>
-            <Link to="/sign">
-                <Button />
-            </Link>
+            <ButtonContainer>
+                <Link to="/sign">
+                    <PageButton>Next</PageButton>
+                </Link>
+            </ButtonContainer>
         </motion.div>
     );
 }

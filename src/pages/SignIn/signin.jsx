@@ -43,7 +43,7 @@ const SignIn = () => {
           toast.error(err.message || 'Failed to sign in.');
         } else {
           login(response);
-          navigate('/home',  { state: { email: values.email } });
+          navigate('/home', { state: { email: values.email } });
           toast.success('Sign in success');
         }
       } catch (error) {
