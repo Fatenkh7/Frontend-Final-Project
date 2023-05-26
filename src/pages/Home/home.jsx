@@ -22,6 +22,8 @@ const HomePage = ({ loading }) => {
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [currentPlayingIndex, setCurrentPlayingIndex] = useState(-1);
   const [latestAnswer, setLatestAnswer] = useState("");
+  const [displayInput, setDisplayInput] = useState(true); // Added state for input display
+
   const location = useLocation();
   const email = location?.state?.email;
 
@@ -29,6 +31,7 @@ const HomePage = ({ loading }) => {
     if (question.trim() !== "") {
       setChatMessages((prevMessages) => [...prevMessages, { type: "question", content: question }]);
       setQuestion("");
+      setDisplayInput(false); // Hide the input temporarily
 
       try {
         const { response, error } = await addQuestion({ question });
@@ -41,6 +44,7 @@ const HomePage = ({ loading }) => {
           doSpeechSynthesis(answer, () => {
             setAudioPlaying(false);
             setCurrentPlayingIndex(-1);
+            setDisplayInput(true); // Show the input again after receiving the answer
           });
         } else if (error) {
           console.log(error);
@@ -129,35 +133,37 @@ const HomePage = ({ loading }) => {
           </Box>
         ))}
       </Box>
-      <Stack width="100%" alignItems="center" justifyContent="center" borderTop="1px solid #39f6ff" bgcolor="#000" zIndex={3}>
-        <Box padding={2} width="100%" maxWidth="md">
-          <FormControl fullWidth variant="outlined">
-            <OutlinedInput
-              placeholder="Ask something..."
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  handleQuestionSubmit();
+      {displayInput && ( // Conditionally render the input based on the displayInput state
+        <Stack width="100%" alignItems="center" justifyContent="center" borderTop="1px solid #39f6ff" bgcolor="#000" zIndex={3}>
+          <Box padding={2} width="100%" maxWidth="md">
+            <FormControl fullWidth variant="outlined">
+              <OutlinedInput
+                placeholder="Ask something..."
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    handleQuestionSubmit();
+                  }
+                }}
+                endAdornment={
+                  <IconButton
+                    color="#39f6ff"
+                    onClick={handleQuestionSubmit}
+                    sx={{
+                      "&:hover": {
+                        cursor: "pointer",
+                      },
+                    }}
+                  >
+                    <SendOutlinedIcon />
+                  </IconButton>
                 }
-              }}
-              endAdornment={
-                <IconButton
-                  color="#39f6ff"
-                  onClick={handleQuestionSubmit}
-                  sx={{
-                    "&:hover": {
-                      cursor: "pointer",
-                    },
-                  }}
-                >
-                  <SendOutlinedIcon />
-                </IconButton>
-              }
-            />
-          </FormControl>
-        </Box>
-      </Stack>
+              />
+            </FormControl>
+          </Box>
+        </Stack>
+      )}
     </Stack>
   );
 };
