@@ -22,16 +22,16 @@ const HomePage = ({ loading }) => {
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [currentPlayingIndex, setCurrentPlayingIndex] = useState(-1);
   const [latestAnswer, setLatestAnswer] = useState("");
-  const [displayInput, setDisplayInput] = useState(true); // Added state for input display
+  const [sendingQuestion, setSendingQuestion] = useState(false); // Added state for tracking question sending
 
   const location = useLocation();
   const email = location?.state?.email;
 
   const handleQuestionSubmit = async () => {
-    if (question.trim() !== "") {
+    if (!sendingQuestion && question.trim() !== "") {
+      setSendingQuestion(true); // Disable question sending until response is received
       setChatMessages((prevMessages) => [...prevMessages, { type: "question", content: question }]);
       setQuestion("");
-      setDisplayInput(false); // Hide the input temporarily
 
       try {
         const { response, error } = await addQuestion({ question });
@@ -44,7 +44,7 @@ const HomePage = ({ loading }) => {
           doSpeechSynthesis(answer, () => {
             setAudioPlaying(false);
             setCurrentPlayingIndex(-1);
-            setDisplayInput(true); // Show the input again after receiving the answer
+            setSendingQuestion(false); // Enable question sending after receiving the answer
           });
         } else if (error) {
           console.log(error);
@@ -53,10 +53,12 @@ const HomePage = ({ loading }) => {
           } else {
             // Handle other errors
           }
+          setSendingQuestion(false); // Enable question sending in case of error
         }
       } catch (error) {
         console.log(error);
         // Handle other errors
+        setSendingQuestion(false); // Enable question sending in case of error
       }
     }
   };
@@ -133,37 +135,36 @@ const HomePage = ({ loading }) => {
           </Box>
         ))}
       </Box>
-      {displayInput && ( // Conditionally render the input based on the displayInput state
-        <Stack width="100%" alignItems="center" justifyContent="center" borderTop="1px solid #39f6ff" bgcolor="#000" zIndex={3}>
-          <Box padding={2} width="100%" maxWidth="md">
-            <FormControl fullWidth variant="outlined">
-              <OutlinedInput
-                placeholder="Ask something..."
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    handleQuestionSubmit();
-                  }
-                }}
-                endAdornment={
-                  <IconButton
-                    color="#39f6ff"
-                    onClick={handleQuestionSubmit}
-                    sx={{
-                      "&:hover": {
-                        cursor: "pointer",
-                      },
-                    }}
-                  >
-                    <SendOutlinedIcon />
-                  </IconButton>
+      <Stack width="100%" alignItems="center" justifyContent="center" borderTop="1px solid #39f6ff" bgcolor="#000" zIndex={3}>
+        <Box padding={2} width="100%" maxWidth="md">
+          <FormControl fullWidth variant="outlined">
+            <OutlinedInput
+              placeholder="Ask something..."
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  handleQuestionSubmit();
                 }
-              />
-            </FormControl>
-          </Box>
-        </Stack>
-      )}
+              }}
+              endAdornment={
+                <IconButton
+                  color="#39f6ff"
+                  onClick={handleQuestionSubmit}
+                  disabled={sendingQuestion} // Disable the send button while sending a question
+                  sx={{
+                    "&:hover": {
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <SendOutlinedIcon />
+                </IconButton>
+              }
+            />
+          </FormControl>
+        </Box>
+      </Stack>
     </Stack>
   );
 };
