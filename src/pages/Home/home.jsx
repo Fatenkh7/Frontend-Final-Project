@@ -44,7 +44,6 @@ const HomePage = ({ loading }) => {
           doSpeechSynthesis(answer, () => {
             setAudioPlaying(false);
             setCurrentPlayingIndex(-1);
-            setSendingQuestion(false); // Enable question sending after receiving the answer
           });
         } else if (error) {
           console.log(error);
@@ -53,13 +52,13 @@ const HomePage = ({ loading }) => {
           } else {
             // Handle other errors
           }
-          setSendingQuestion(false); // Enable question sending in case of error
         }
       } catch (error) {
         console.log(error);
         // Handle other errors
-        setSendingQuestion(false); // Enable question sending in case of error
       }
+
+      setSendingQuestion(false); // Enable question sending after completing the request
     }
   };
 
