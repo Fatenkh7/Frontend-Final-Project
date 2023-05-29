@@ -51,6 +51,7 @@ const SignInButton = styled(Button)`
   && {
     background-color: #15b1b9;
     color: #ffffff;
+    text-decoration:none;
     margin-right: 10px;
     &:hover {
       background-color: #39f6ff;
@@ -63,6 +64,7 @@ const SignUpButton = styled(Button)`
   && {
     border: 1px solid #03e9f4;
     background-color: #1c1c1c;
+    text-decoration:none;
     color: #ffffff;
     margin-left: 10px;
     &:hover {

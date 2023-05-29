@@ -12,6 +12,7 @@ const PageButton = styled(Button)`
     background-color: #15b1b9;
     color: #ffffff;
     margin-right: 10px;
+    text-decoration:none;
     &:hover {
       background-color: #39f6ff;
       color: #ffffff;
