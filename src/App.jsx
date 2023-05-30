@@ -15,6 +15,7 @@ import About from "./pages/About/About";
 import Loading from "./components/loading/loading";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
+import Contact from "./pages/Contact/Contact";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -61,6 +62,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Page loading={loading} />} />
           <Route path="/about" element={<About loading={loading} />} />
+          <Route path="/contact" element={<AuthRoute>
+            <Contact loading={loading} />
+          </AuthRoute>} />
           <Route path="/sign" element={<FirstPage loading={loading} />} />
           <Route
             path="/signin"
