@@ -5,7 +5,6 @@ import logo from '../../logo.svg';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Typewriter from 'typewriter-effect/dist/core';
-import "./firstpage.css";
 import Loading from '../../components/loading/loading';
 
 const Container = styled(Box)`
@@ -32,7 +31,6 @@ const BotIcon = styled(motion.img)`
   height: 300px;
 `;
 
-
 const Text = styled(Typography)`
   font-size: 1rem;
   text-align: center;
@@ -47,12 +45,16 @@ const ButtonContainer = styled(Box)`
   align-items: center;
 `;
 
-const SignInButton = styled(Button)`
+const ButtonLink = styled(Link)`
+  text-decoration: none;
+`;
+
+const ButtonBase = styled(Button)`
   && {
     background-color: #15b1b9;
     color: #ffffff;
-    text-decoration:none;
-    margin-right: 10px;
+    text-decoration: none;
+    margin: 0 10px;
     &:hover {
       background-color: #39f6ff;
       color: #ffffff;
@@ -60,18 +62,25 @@ const SignInButton = styled(Button)`
   }
 `;
 
-const SignUpButton = styled(Button)`
+const SignInButton = styled(ButtonBase)`
+  && {
+    margin-right: 10px;
+  }
+`;
+
+const SignUpButton = styled(ButtonBase)`
   && {
     border: 1px solid #03e9f4;
     background-color: #1c1c1c;
-    text-decoration:none;
     color: #ffffff;
     margin-left: 10px;
-    &:hover {
-      background-color: #39f6ff;
-      color: #ffffff;
-    }
   }
+`;
+
+const ContactLink = styled.a`
+  text-decoration: underline;
+  color: #ffffff;
+  margin-top: 10px;
 `;
 
 const FirstPage = ({ loading }) => {
@@ -109,13 +118,14 @@ const FirstPage = ({ loading }) => {
         </AnimatePresence>
         <Text variant="body1" id="typewriter" />
         <ButtonContainer>
-          <Link to="/signin">
+          <ButtonLink to="/signin">
             <SignInButton variant="contained">Sign In</SignInButton>
-          </Link>
-          <Link to="/signup">
+          </ButtonLink>
+          <ButtonLink to="/signup">
             <SignUpButton variant="contained">Sign Up</SignUpButton>
-          </Link>
+          </ButtonLink>
         </ButtonContainer>
+        <ContactLink href="/contact">Contact Us</ContactLink>
       </BotContainer>
     </Container>
   );
