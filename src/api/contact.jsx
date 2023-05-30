@@ -8,7 +8,7 @@ export const createMessage = async (first_name, last_name, email, message) => {
             message,
         });
 
-        return { response: response.data, error: null };
+        return { response: response, error: null };
     } catch (error) {
         return { response: null, error: error.response.data };
     }

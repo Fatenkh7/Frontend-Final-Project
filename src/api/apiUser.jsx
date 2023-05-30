@@ -2,7 +2,7 @@ import axiosClient from "./apiClient";
 
 export const userSignIn = async (email, password) => {
   try {
-    const response = await axiosClient.post('user/signin', { email, password });
+    const response = await axiosClient.post('/user/signin', { email, password });
     const token = response.data.token;
     localStorage.setItem('token', token);
     return { response: response.data, error: null };
