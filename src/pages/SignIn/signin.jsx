@@ -39,15 +39,15 @@ const SignIn = () => {
         setIsRequest(true);
         setLoading(true);
         const { response, err } = await userSignIn(values.email, values.password);
-        if (err) {
-          toast.error(err.message || 'Failed to sign in.');
-        } else {
+        if (response) {
           login(response);
           navigate('/home', { state: { email: values.email } });
-          toast.success('Sign in success');
+          toast.success('Sign in successful');
+        } else {
+          toast.error(err?.message || 'Failed to sign in.');
         }
       } catch (error) {
-        toast.error("Failed to sign in");
+        toast.error('Failed to sign in');
       } finally {
         setIsRequest(false);
         setLoading(false);
