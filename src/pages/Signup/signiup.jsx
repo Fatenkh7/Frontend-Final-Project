@@ -39,8 +39,7 @@ const SignUp = () => {
                 .string()
                 .trim()
                 .required('Email is required')
-                .email('Invalid email address')
-                .min(19,'Invalid email'),
+                .email('Invalid email address'),
             username: yup
                 .string()
                 .trim()
