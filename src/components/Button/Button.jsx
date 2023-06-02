@@ -1,6 +1,6 @@
 import "./Button.css"
 function Button() {
-    return (<button class="btn-compo">
+    return (<button className="btn-compo">
         NEXT
     </button>);
 }
